@@ -18,6 +18,7 @@ namespace sqlipf
             //inputSQL = Clipboard.GetText();
             //Console.WriteLine("GetText:" + inputSQL);
             string afs=PoorMansTSqlFormatterLib.SqlFormattingManager.AutoFormat();
+            
             Console.WriteLine(afs);
             Console.WriteLine("done!");
 

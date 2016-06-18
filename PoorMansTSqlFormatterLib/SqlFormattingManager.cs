@@ -24,6 +24,7 @@ using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using RGiesecke.DllExport;
 
 namespace PoorMansTSqlFormatterLib
 {
@@ -52,7 +53,10 @@ namespace PoorMansTSqlFormatterLib
         public Interfaces.ISqlTokenizer Tokenizer { get; set; }
         public Interfaces.ISqlTokenParser Parser { get; set; }
         public Interfaces.ISqlTreeFormatter Formatter { get; set; }
+
+        [DllExport]
         public static string AutoFormat() {
+            
             string inputSQL = Clipboard.GetText();
             return (new SqlFormattingManager().Format(inputSQL));
         }
