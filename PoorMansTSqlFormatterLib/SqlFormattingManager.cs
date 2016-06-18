@@ -23,6 +23,7 @@ using System.Xml;
 using System.Text;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace PoorMansTSqlFormatterLib
 {
@@ -32,6 +33,7 @@ namespace PoorMansTSqlFormatterLib
     [ClassInterface(ClassInterfaceType.None)]
     [ComVisible(true)]
     [ProgId("PoorMansTSqlFormatter.SqlFormattingManager")]
+    
     public class SqlFormattingManager : _SqlFormattingManager
     {
         //default to built-in
@@ -50,7 +52,10 @@ namespace PoorMansTSqlFormatterLib
         public Interfaces.ISqlTokenizer Tokenizer { get; set; }
         public Interfaces.ISqlTokenParser Parser { get; set; }
         public Interfaces.ISqlTreeFormatter Formatter { get; set; }
-
+        public static string AutoFormat() {
+            string inputSQL = Clipboard.GetText();
+            return (new SqlFormattingManager().Format(inputSQL));
+        }
         public string Format(string inputSQL)
         {
             bool error = false;
@@ -84,4 +89,7 @@ namespace PoorMansTSqlFormatterLib
     {
         string Format(string inputSQL);
     }
+
+    
+    
 }

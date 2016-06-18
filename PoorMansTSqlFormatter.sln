@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoorMansTSqlFormatterLib_35
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sqlipf", "sqlipf\sqlipf.csproj", "{5EE61662-85F3-464B-B169-C5E7C36BB4F1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PoorMansTSqlFormatterLib_4", "PoorMansTSqlFormatterLib\PoorMansTSqlFormatterLib_4.csproj", "{2F9F4DCF-A739-48DA-9B6F-46CC02103BAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{5EE61662-85F3-464B-B169-C5E7C36BB4F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EE61662-85F3-464B-B169-C5E7C36BB4F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EE61662-85F3-464B-B169-C5E7C36BB4F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F9F4DCF-A739-48DA-9B6F-46CC02103BAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F9F4DCF-A739-48DA-9B6F-46CC02103BAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F9F4DCF-A739-48DA-9B6F-46CC02103BAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F9F4DCF-A739-48DA-9B6F-46CC02103BAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
