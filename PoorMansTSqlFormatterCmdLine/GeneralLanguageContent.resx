@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -184,7 +184,7 @@ ae  allowParsingErrors (default: false)
 e   extensions (default: sql)
 r   recursive (default: false)
 b   backups (default: true)
-b   outputFileOrFolder (default: none; if set, overrides the backup option)
+o   outputFileOrFolder (default: none; if set, overrides the backup option)
 l   languageCode (default: current if supported or EN; valid values include EN, FR and ES)
 h ? help
 

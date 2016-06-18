@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 using System.Reflection;
+using System.Windows.Forms;
 using NDesk.Options;
 
 namespace PoorMansTSqlFormatterCmdLine
@@ -42,30 +43,32 @@ namespace PoorMansTSqlFormatterCmdLine
         {
             //formatter engine option defaults
             var options = new PoorMansTSqlFormatterLib.Formatters.TSqlStandardFormatterOptions
-                {
-                    KeywordStandardization = true,
-                    IndentString = "\t",
-                    SpacesPerTab = 4,
-					MaxLineWidth = 999,
-					NewStatementLineBreaks = 2,
-					NewClauseLineBreaks = 1,
-					TrailingCommas = false,
-                    SpaceAfterExpandedComma = false,
-                    ExpandBetweenConditions = true,
-                    ExpandBooleanExpressions = true,
-                    ExpandCaseStatements = true,
-                    ExpandCommaLists = true,
-                    BreakJoinOnSections = false,
-                    UppercaseKeywords = true,
-					ExpandInLists = true
-                };
-            
+            {
+                KeywordStandardization = true,
+                IndentString = "\t",
+                SpacesPerTab = 4,
+                MaxLineWidth = 999,
+                NewStatementLineBreaks = 2,
+                NewClauseLineBreaks = 1,
+                TrailingCommas = false,
+                SpaceAfterExpandedComma = false,
+                ExpandBetweenConditions = true,
+                ExpandBooleanExpressions = true,
+                ExpandCaseStatements = true,
+                ExpandCommaLists = true,
+                BreakJoinOnSections = false,
+                UppercaseKeywords = true,
+                ExpandInLists = true
+            };
+
             //bulk formatter options
             bool allowParsingErrors = false;
             List<string> extensions = new List<string>();
             bool backups = true;
             bool recursiveSearch = false;
+            bool readClipboard = false;
             string outputFileOrFolder = null;
+            string inputSQL = null;
             string uiLangCode = null;
 
             //flow/tracking switches
@@ -73,34 +76,38 @@ namespace PoorMansTSqlFormatterCmdLine
             bool showUsageError = false;
 
             OptionSet p = new OptionSet()
-              .Add("is|indentString=", delegate(string v) { options.IndentString = v; })
-              .Add("st|spacesPerTab=", delegate(string v) { options.SpacesPerTab = int.Parse(v); })
-              .Add("mw|maxLineWidth=", delegate(string v) { options.MaxLineWidth = int.Parse(v); })
-			  .Add("sb|statementBreaks=", delegate(string v) { options.NewStatementLineBreaks = int.Parse(v); })
-			  .Add("cb|clauseBreaks=", delegate(string v) { options.NewClauseLineBreaks = int.Parse(v); })
-			  .Add("tc|trailingCommas", delegate(string v) { options.TrailingCommas = v != null; })
-              .Add("sac|spaceAfterExpandedComma", delegate(string v) { options.SpaceAfterExpandedComma = v != null; })
-              .Add("ebc|expandBetweenConditions", delegate(string v) { options.ExpandBetweenConditions = v != null; })
-              .Add("ebe|expandBooleanExpressions", delegate(string v) { options.ExpandBooleanExpressions = v != null; })
-              .Add("ecs|expandCaseStatements", delegate(string v) { options.ExpandCaseStatements = v != null; })
-			  .Add("ecl|expandCommaLists", delegate(string v) { options.ExpandCommaLists = v != null; })
-			  .Add("eil|expandInLists", delegate(string v) { options.ExpandInLists = v != null; })
-			  .Add("bjo|breakJoinOnSections", delegate(string v) { options.BreakJoinOnSections = v != null; })
-              .Add("uk|uppercaseKeywords", delegate(string v) { options.UppercaseKeywords = v != null; })
-              .Add("sk|standardizeKeywords", delegate(string v) { options.KeywordStandardization = v != null; })
+              .Add("is|indentString=", delegate (string v) { options.IndentString = v; })
+              .Add("st|spacesPerTab=", delegate (string v) { options.SpacesPerTab = int.Parse(v); })
+              .Add("mw|maxLineWidth=", delegate (string v) { options.MaxLineWidth = int.Parse(v); })
+              .Add("sb|statementBreaks=", delegate (string v) { options.NewStatementLineBreaks = int.Parse(v); })
+              .Add("cb|clauseBreaks=", delegate (string v) { options.NewClauseLineBreaks = int.Parse(v); })
+              .Add("tc|trailingCommas", delegate (string v) { options.TrailingCommas = v != null; })
+              .Add("sac|spaceAfterExpandedComma", delegate (string v) { options.SpaceAfterExpandedComma = v != null; })
+              .Add("ebc|expandBetweenConditions", delegate (string v) { options.ExpandBetweenConditions = v != null; })
+              .Add("ebe|expandBooleanExpressions", delegate (string v) { options.ExpandBooleanExpressions = v != null; })
+              .Add("ecs|expandCaseStatements", delegate (string v) { options.ExpandCaseStatements = v != null; })
+              .Add("ecl|expandCommaLists", delegate (string v) { options.ExpandCommaLists = v != null; })
+              .Add("eil|expandInLists", delegate (string v) { options.ExpandInLists = v != null; })
+              .Add("bjo|breakJoinOnSections", delegate (string v) { options.BreakJoinOnSections = v != null; })
+              .Add("uk|uppercaseKeywords", delegate (string v) { options.UppercaseKeywords = v != null; })
+              .Add("sk|standardizeKeywords", delegate (string v) { options.KeywordStandardization = v != null; })
 
-              .Add("ae|allowParsingErrors", delegate(string v) { allowParsingErrors = v != null; })
-              .Add("e|extensions=", delegate(string v) { extensions.Add((v.StartsWith(".") ? "" : ".") + v); })
-              .Add("r|recursive", delegate(string v) { recursiveSearch = v != null; })
-              .Add("b|backups", delegate(string v) { backups = v != null; })
-              .Add("o|outputFileOrFolder=", delegate(string v) { outputFileOrFolder = v; })
-              .Add("l|languageCode=", delegate(string v) { uiLangCode = v; })
-              .Add("h|?|help", delegate(string v) { showUsageFriendly = v != null; })
+              .Add("ae|allowParsingErrors", delegate (string v) { allowParsingErrors = v != null; })
+              .Add("e|extensions=", delegate (string v) { extensions.Add((v.StartsWith(".") ? "" : ".") + v); })
+              .Add("r|recursive", delegate (string v) { recursiveSearch = v != null; })
+              .Add("b|backups", delegate (string v) { backups = v != null; })
+              .Add("o|outputFileOrFolder=", delegate (string v) { outputFileOrFolder = v; })
+              .Add("s|inputSQL=", delegate (string v) { inputSQL = v; })
+              .Add("c|readClipboard", delegate (string v) { readClipboard = v != null; })
+              .Add("l|languageCode=", delegate (string v) { uiLangCode = v; })
+              .Add("h|?|help", delegate (string v) { showUsageFriendly = v != null; })
                   ;
 
             //first parse the args
             List<string> remainingArgs = p.Parse(args);
-
+            //Console.WriteLine("inputSQL");
+            //Console.WriteLine(inputSQL);
+            //return 0;
             //then switch language if necessary
             if (uiLangCode != null)
             {
@@ -130,14 +137,37 @@ namespace PoorMansTSqlFormatterCmdLine
             //nasty trick to figure out whether we're in a pipeline or not
             bool throwAwayValue;
             string stdInput = null;
-            try
+            //TODO: Hack
+            if (readClipboard)
             {
-                throwAwayValue = System.Console.KeyAvailable;
+                Console.WriteLine("clipboard");
             }
-            catch (InvalidOperationException)
+            else
             {
-                Console.InputEncoding = Encoding.UTF8;
-                stdInput = System.Console.In.ReadToEnd();
+                Console.WriteLine("NO!!");
+            }
+            if (readClipboard)
+            {
+                stdInput = Clipboard.GetText();
+                Console.WriteLine("stdInput");
+                Console.WriteLine(stdInput);
+            }
+            else if (!string.IsNullOrEmpty(inputSQL))
+            {
+                Console.WriteLine("FOOOOOO");
+                stdInput = inputSQL;
+            }
+            else
+            {
+                try
+                {
+                    throwAwayValue = System.Console.KeyAvailable;
+                }
+                catch (InvalidOperationException)
+                {
+                    Console.InputEncoding = Encoding.UTF8;
+                    stdInput = System.Console.In.ReadToEnd();
+                }
             }
 
             //then complain about missing input or unrecognized args
@@ -367,7 +397,7 @@ namespace PoorMansTSqlFormatterCmdLine
             }
             if (!parsingError
                 && (
-                        (newFileContents.Length > 0 
+                        (newFileContents.Length > 0
                         && !oldFileContents.Equals(newFileContents)
                         )
                         || singleFileWriter != null
