@@ -61,7 +61,8 @@ namespace PoorMansTSqlFormatterCmdLine.FrameworkClassReplacements
                 }
 
                 //if we're asking for the default language, then ask for the invaliant (non-specific) resources.
-                if (_neutralResourcesCulture.Equals(culture))
+                //TODO: Hack, looks for GeneralLanguageContent.en-US.resx instead of GeneralLanguageContent.resx
+                if (_neutralResourcesCulture.Equals(culture) || true)
                     culture = CultureInfo.InvariantCulture;
                 resourceFileName = GetResourceFileName(culture);
 

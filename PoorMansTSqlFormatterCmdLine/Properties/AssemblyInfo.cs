@@ -1,4 +1,5 @@
-﻿/*
+﻿using System.Resources;
+/*
 Poor Man's T-SQL Formatter - a small free Transact-SQL formatting 
 library for .Net 2.0, written in C#. 
 Copyright (C) 2011 Tao Klerks
@@ -33,3 +34,5 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: Guid("4dacf3ba-d535-4244-b756-7d9ecfe577ae")]
 [assembly: AssemblyVersion("1.5.1.*")]
+[assembly: NeutralResourcesLanguage("")]
+

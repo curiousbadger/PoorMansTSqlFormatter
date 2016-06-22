@@ -7,6 +7,9 @@
 #Notepad++ file autosave plugin
 *~
 
+#Backup folder
+Backup
+
 #Custom deployment binaries folder
 Deployment
 
