@@ -49,6 +49,10 @@ obj/
 [Dd]ebug*/
 [Rr]elease*/
 Ankh.NoLoad
+# VS now auto-creates Backup directories when migrating older solutions etc...
+Backup*/
+.vs/
+UpgradeLog.htm
 
 #Tooling
 _ReSharper*/
