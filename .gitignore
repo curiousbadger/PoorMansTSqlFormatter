@@ -51,6 +51,7 @@ obj/
 Ankh.NoLoad
 Backup*/
 .vs*/
+UpgradeLog*.htm
 
 #Tooling
 _ReSharper*/
