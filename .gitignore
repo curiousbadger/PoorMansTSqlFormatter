@@ -50,6 +50,7 @@ obj/
 [Rr]elease*/
 Ankh.NoLoad
 Backup*/
+.vs*/
 
 #Tooling
 _ReSharper*/
